@@ -6,30 +6,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class RequestService {
-    private CityRepository cityRepository;
+    private final CityRepository cityRepository;
 
     @Autowired
     public RequestService(CityRepository cityRepository){
         this.cityRepository = cityRepository;
     }
 
-    public ArrayList<CityModel> getCityList(){
-        String query = "select * from city limit 7;";
-        return  cityRepository.performQuery(query);
+    public ArrayList<CityModel> getCityArray(){
+        return  cityRepository.getCityArray();
     };
 
-    public CityModel[] getCityById(int id){
-        String query = "select * from city where id = " + Integer.toString(id);
-        try {
-            return new CityModel[] {cityRepository.performQuery(query).get(0)};
+    public CityModel getCityById(int id){
+        Optional<CityModel> city = cityRepository.getCityById(id);
+        if(city.isPresent()){
+            return city.get();
         }
-        catch (IndexOutOfBoundsException e){
-            System.out.println("No city with this id exist!");
+        else {
+            return new CityModel("","",-1);
         }
-
-        return new CityModel[] {new CityModel("", "", -1)};
     }
 }

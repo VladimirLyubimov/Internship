@@ -20,19 +20,19 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/city_model")
-    public ArrayList<CityModel> getRequestResult(){
+    public ArrayList<CityModel> getCityArray(){
         ArrayList<CityModel> result;
 
-        result = requestService.getCityList();
+        result = requestService.getCityArray();
 
         return result;
     }
 
-    @GetMapping("/city_model/{number}")
-    public CityModel[] getRequestResult(@PathVariable int number){
-        CityModel[] result;
+    @GetMapping("/city_model/{id}")
+    public CityModel getCityById(@PathVariable int id){
+        CityModel result;
 
-        result = requestService.getCityById(number);
+        result = requestService.getCityById(id);
 
         return result;
     }
