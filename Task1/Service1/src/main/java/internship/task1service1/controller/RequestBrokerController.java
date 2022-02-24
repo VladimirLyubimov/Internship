@@ -1,37 +1,36 @@
 package internship.task1service1.controller;
 
+import internship.task1service1.httpClient.CityHttpClient;
 import internship.task1service1.model.CityModel;
+import internship.task1service1.service.RequestBrokerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
-import static internship.task1service1.controller.ResponseDataParser.getAnswer;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class RequestBrokerController {
     private final Logger logger =  LoggerFactory.getLogger(RequestBrokerController.class);
 
-    @GetMapping
-    public CityModel[] makeRequest(@RequestParam(defaultValue = "select * from city order by Population desc limit 5;") String query){
-        HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://localhost:8100?query=" + query.replace(' ', '+'))).GET().build();
+    private RequestBrokerService requestBrokerService;
 
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            logger.info("Successful connect to http://localhost:8090?query=" + query);
-            return getAnswer(response.body());
+    @Autowired
+    public RequestBrokerController(RequestBrokerService requestBrokerService){
+        this.requestBrokerService = requestBrokerService;
+    }
+
+    @GetMapping("/city_model")
+    public CityModel[] makeRequest(HttpServletRequest servletRequest, @RequestParam(defaultValue = "") String id){
+        requestBrokerService.setClient(new CityHttpClient());
+        String path = servletRequest.getRequestURI();
+        if(!path.endsWith("/")){
+            path = path.concat("/");
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            logger.info("Can't connect to http://localhost:8090?query=" + query);
-            return new CityModel[0];
-        }
+        System.out.println(path + id);
+        return requestBrokerService.getResponseData(path + id);
     }
 }

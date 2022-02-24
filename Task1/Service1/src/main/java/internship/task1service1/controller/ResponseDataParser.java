@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import internship.task1service1.model.CityModel;
 
 public class ResponseDataParser {
-    static CityModel[] getAnswer(String responseBody){
+    static public CityModel[] getAnswer(String responseBody){
         CityModel[] result;
         ObjectMapper mapper = new ObjectMapper();
         try {
