@@ -2,12 +2,12 @@ package internship.task1service2.model;
 
 public class CityModel {
     private String name;
-    private String country_code;
+    private String countryCode;
     private int population;
 
-    public CityModel(String name, String country_code, int population) {
+    public CityModel(String name, String countryCode, int population) {
         this.name = name;
-        this.country_code = country_code;
+        this.countryCode = countryCode;
         this.population = population;
     }
 
@@ -15,8 +15,8 @@ public class CityModel {
         return this.name;
     }
 
-    public String getCountry_code() {
-        return this.country_code;
+    public String getCountryCode() {
+        return this.countryCode;
     }
 
     public int getPopulation() {
@@ -27,8 +27,8 @@ public class CityModel {
         this.name = name;
     }
 
-    public void setCountry_code(String country_code) {
-        this.country_code = country_code;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     public void setPopulation(int population) {
