@@ -7,6 +7,12 @@ public class CityModel {
 
     public CityModel(){}
 
+    public CityModel(String name, String countryCode, int population){
+        this.name = name;
+        this.countryCode = countryCode;
+        this.population = population;
+    }
+
     public String getName() {
         return this.name;
     }
