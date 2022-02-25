@@ -1,5 +1,7 @@
 package internship.task1service1.controller;
 
+import internship.task1service1.exceptions.EmptyResultException;
+import internship.task1service1.exceptions.FailConnectionException;
 import internship.task1service1.model.CityModel;
 import internship.task1service1.service.RequestBrokerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,11 @@ public class RequestBrokerController {
 
     @GetMapping("/city_model")
     public CityModel[] getCityArray(){
-        return requestBrokerService.getCityArray();
+        return requestBrokerService.getCityArray().get();
     }
 
     @GetMapping("/city_model/{id}")
-    public CityModel getCityById(@PathVariable int id){
+    public CityModel getCityById(@PathVariable int id) throws EmptyResultException, FailConnectionException {
         return requestBrokerService.getCityById(id);
     }
 }

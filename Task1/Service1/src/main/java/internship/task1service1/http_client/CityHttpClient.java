@@ -1,8 +1,11 @@
 package internship.task1service1.http_client;
 
+import internship.task1service1.exceptions.EmptyResultException;
+import internship.task1service1.exceptions.FailConnectionException;
 import internship.task1service1.model.CityModel;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -31,16 +34,19 @@ public class CityHttpClient{
         }
     }
 
-    public Optional<CityModel> getCityById(int id){
+    public Optional<CityModel> getCityById(int id) throws EmptyResultException, FailConnectionException {
         client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path + id)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if(response.statusCode() == 404){
+                throw new EmptyResultException(ResponseDataParser.getErrorResponse(response.body()).getErrorDescriptionMessage());
+            }
             return  Optional.ofNullable(ResponseDataParser.getOneCity(response.body()));
         }
-        catch (Exception e) {
+        catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return Optional.empty();
+            throw new FailConnectionException("Fail to connect to " + path + id);
         }
     }
 }

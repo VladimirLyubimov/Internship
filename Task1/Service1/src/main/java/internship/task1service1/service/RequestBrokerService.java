@@ -1,6 +1,8 @@
 package internship.task1service1.service;
 
 import internship.task1service1.controller.RequestBrokerController;
+import internship.task1service1.exceptions.EmptyResultException;
+import internship.task1service1.exceptions.FailConnectionException;
 import internship.task1service1.http_client.CityHttpClient;
 import internship.task1service1.model.CityModel;
 import org.slf4j.Logger;
@@ -21,27 +23,35 @@ public class RequestBrokerService {
         this.cityHttpClient = cityHttpClient;
     }
 
-    public CityModel[] getCityArray(){
+    public Optional<CityModel[]> getCityArray(){
         Optional<CityModel[]> result = cityHttpClient.getCityArray();
         if(result.isPresent()){
             logger.info("Successful request to " + path);
-            return result.get();
         }
         else{
             logger.info("Fail to make correct request to " + path);
-            return new CityModel[0];
         }
+
+        return result;
     }
 
-    public CityModel getCityById(int id){
-        Optional<CityModel> result = cityHttpClient.getCityById(id);
-        if(result.isPresent()){
-            logger.info("Successful request to " + path);
-            return result.get();
+    public CityModel getCityById(int id) throws EmptyResultException, FailConnectionException {
+        try {
+            Optional<CityModel> result = cityHttpClient.getCityById(id);
+            if (result.isPresent()) {
+                logger.info("Successful request to " + path + id);
+                return result.get();
+            } else {
+                return new CityModel("", "", -1);
+            }
         }
-        else{
-            logger.info("Fail to make correct request to " + path);
-            return new CityModel("", "", -1);
+        catch(EmptyResultException e){
+            logger.info("Successfully connected to " + path + id + ", but didn't get data");
+            throw e;
+        }
+        catch(FailConnectionException e){
+            logger.info("Fail to make correct request to " + path + id);
+            throw e;
         }
     }
 }

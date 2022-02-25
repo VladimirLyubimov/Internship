@@ -1,5 +1,7 @@
 package internship.task1service1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class CityModel {
     private String name;
     private String countryCode;
@@ -35,5 +37,10 @@ public class CityModel {
 
     public void setPopulation(int population) {
         this.population = population;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty(){
+        return population < 0;
     }
 }
