@@ -1,5 +1,6 @@
 package internship.task1service2.service;
 
+import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
 import internship.task1service2.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,13 @@ public class RequestService {
         return  cityRepository.getCityArray();
     };
 
-    public CityModel getCityById(int id){
+    public CityModel getCityById(int id) throws SQLRequestException {
         Optional<CityModel> city = cityRepository.getCityById(id);
         if(city.isPresent()){
             return city.get();
         }
         else {
-            return new CityModel("","",-1);
+            throw new SQLRequestException("No city with id = " + id + " exists in database");
         }
     }
 }

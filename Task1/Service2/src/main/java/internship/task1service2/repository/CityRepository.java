@@ -1,5 +1,6 @@
 package internship.task1service2.repository;
 
+import internship.task1service2.exceptions.DatabaseConnectionException;
 import internship.task1service2.model.CityModel;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,12 @@ public class CityRepository {
     public CityRepository(){}
 
     @PostConstruct
-    public void openConnection(){
+    public void openConnection() throws DatabaseConnectionException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            throw new DatabaseConnectionException("Error with MySQL JDBC driver");
         }
 
         try {
@@ -28,6 +30,7 @@ public class CityRepository {
         }
         catch (SQLException e){
             e.printStackTrace();
+            throw new DatabaseConnectionException("Can't connect to database. Check database URL, username and password");
         }
     }
 
@@ -66,8 +69,8 @@ public class CityRepository {
         return result;
     }
 
-    public Optional<CityModel> getCityById(int id){
-        String query = "select * from city limit " + id + ';';
+    public Optional<CityModel> getCityById(int id) {
+        String query = "select * from city where id = " + id + ';';
         Optional<CityModel> result;
         try {
             Statement stmt = con.createStatement();

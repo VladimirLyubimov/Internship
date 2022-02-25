@@ -1,5 +1,6 @@
 package internship.task1service2.controller;
 
+import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
 import internship.task1service2.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,7 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/city_model/{id}")
-    public CityModel getCityById(@PathVariable int id){
-        CityModel result;
-
-        result = requestService.getCityById(id);
-
-        return result;
+    public CityModel getCityById(@PathVariable int id) throws SQLRequestException{
+        return requestService.getCityById(id);
     }
 }
