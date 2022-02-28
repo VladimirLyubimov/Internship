@@ -3,16 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>internship</groupId>
+        <artifactId>intershiptask1</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>internship</groupId>
-    <artifactId>Task1Service2</artifactId>
+    <artifactId>task1service2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Task1Service2</name>
-    <description>Task1Service2</description>
+    <name>task1service2</name>
+    <description>task1service2</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -21,20 +19,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
