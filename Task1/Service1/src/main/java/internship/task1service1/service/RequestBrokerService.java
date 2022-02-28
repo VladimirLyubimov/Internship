@@ -1,8 +1,10 @@
 package internship.task1service1.service;
 
 import internship.task1service1.controller.RequestBrokerController;
+import internship.task1service1.exceptions.DatabaseConnectionException;
 import internship.task1service1.exceptions.EmptyResultException;
 import internship.task1service1.exceptions.FailConnectionException;
+import internship.task1service1.exceptions.SQLRequestException;
 import internship.task1service1.http_client.CityHttpClient;
 import internship.task1service1.model.CityModel;
 import org.slf4j.Logger;
@@ -23,29 +25,39 @@ public class RequestBrokerService {
         this.cityHttpClient = cityHttpClient;
     }
 
-    public Optional<CityModel[]> getCityArray(){
-        Optional<CityModel[]> result = cityHttpClient.getCityArray();
-        if(result.isPresent()){
-            logger.info("Successful request to " + path);
-        }
-        else{
-            logger.info("Fail to make correct request to " + path);
-        }
-
-        return result;
-    }
-
-    public CityModel getCityById(int id) throws EmptyResultException, FailConnectionException {
+    public CityModel[] getCityArray() throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException{
         try {
-            Optional<CityModel> result = cityHttpClient.getCityById(id);
-            if (result.isPresent()) {
-                logger.info("Successful request to " + path + id);
+            Optional<CityModel[]> result = cityHttpClient.getCityArray();
+            if (result.isPresent() && result.get().length != 0) {
+                logger.info("Successfully connected to " + path);
                 return result.get();
-            } else {
-                return new CityModel("", "", -1);
+            }
+            else{
+                throw new EmptyResultException("Requested data hasn't been found");
             }
         }
-        catch(EmptyResultException e){
+        catch (EmptyResultException | SQLRequestException | DatabaseConnectionException e){
+            logger.info("Successfully connected to " + path + ", but didn't get data");
+            throw e;
+        }
+
+        catch(FailConnectionException e){
+            logger.info("Fail to make correct request to " + path);
+            throw  e;
+        }
+    }
+
+    public CityModel getCityById(int id) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
+        try {
+            Optional<CityModel> result = cityHttpClient.getCityById(id);
+            if (result.isPresent() && !result.get().isEmpty()) {
+                logger.info("Successfully connected to " + path + id);
+                return result.get();
+            } else {
+                throw new EmptyResultException("City with id = " + id + " hasn't been found");
+            }
+        }
+        catch(EmptyResultException | SQLRequestException | DatabaseConnectionException e){
             logger.info("Successfully connected to " + path + id + ", but didn't get data");
             throw e;
         }

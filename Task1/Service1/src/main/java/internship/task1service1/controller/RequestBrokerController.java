@@ -1,7 +1,9 @@
 package internship.task1service1.controller;
 
+import internship.task1service1.exceptions.DatabaseConnectionException;
 import internship.task1service1.exceptions.EmptyResultException;
 import internship.task1service1.exceptions.FailConnectionException;
+import internship.task1service1.exceptions.SQLRequestException;
 import internship.task1service1.model.CityModel;
 import internship.task1service1.service.RequestBrokerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,12 @@ public class RequestBrokerController {
     }
 
     @GetMapping("/city_model")
-    public CityModel[] getCityArray(){
-        return requestBrokerService.getCityArray().get();
+    public CityModel[] getCityArray() throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
+        return requestBrokerService.getCityArray();
     }
 
     @GetMapping("/city_model/{id}")
-    public CityModel getCityById(@PathVariable int id) throws EmptyResultException, FailConnectionException {
+    public CityModel getCityById(@PathVariable int id) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
         return requestBrokerService.getCityById(id);
     }
 }
