@@ -1,11 +1,10 @@
 package internship.task1service2.repository;
 
 import internship.task1service2.exceptions.DatabaseConnectionException;
+import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -16,7 +15,6 @@ public class CityRepository {
 
     public CityRepository(){}
 
-    @PostConstruct
     public void openConnection() throws DatabaseConnectionException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -34,8 +32,7 @@ public class CityRepository {
         }
     }
 
-    @PreDestroy
-    public void closeConnection(){
+    public void closeConnection() throws DatabaseConnectionException{
         try {
             if(con != null) {
                 con.close();
@@ -43,10 +40,13 @@ public class CityRepository {
         }
         catch (SQLException e){
             e.printStackTrace();
+            throw new DatabaseConnectionException("Error with closing connection with database");
         }
     }
 
-    public ArrayList<CityModel> getCityArray(){
+    public ArrayList<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
+        openConnection();
+
         String query = "select * from city limit 7;";
         ArrayList<CityModel> result = new ArrayList<>();
         try {
@@ -63,13 +63,18 @@ public class CityRepository {
         }
         catch (SQLException e){
             e.printStackTrace();
-            result.clear();
+            closeConnection();
+            throw new SQLRequestException("Can't make request to database correctly");
         }
+
+        closeConnection();
 
         return result;
     }
 
-    public Optional<CityModel> getCityById(int id) {
+    public Optional<CityModel> getCityById(int id) throws SQLRequestException, DatabaseConnectionException{
+        openConnection();
+
         String query = "select * from city where id = " + id + ';';
         Optional<CityModel> result;
         try {
@@ -83,13 +88,16 @@ public class CityRepository {
         }
         catch (SQLException e){
             e.printStackTrace();
-            result = Optional.empty();
+            closeConnection();
+            throw new SQLRequestException("Can't make request to database correctly");
         }
+
+        closeConnection();
 
         return result;
     }
 
-    private CityModel getCityFromResultSet(ResultSet rs){
+    private CityModel getCityFromResultSet(ResultSet rs) throws SQLRequestException{
         CityModel city = null;
         try {
             if (rs.next()) {
@@ -98,6 +106,7 @@ public class CityRepository {
         }
         catch(SQLException e){
             e.printStackTrace();
+            throw new SQLRequestException("Error occurred during working with JDBC result set");
         }
 
         return city;

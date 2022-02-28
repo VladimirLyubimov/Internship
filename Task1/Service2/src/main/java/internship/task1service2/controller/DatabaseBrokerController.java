@@ -1,5 +1,6 @@
 package internship.task1service2.controller;
 
+import internship.task1service2.exceptions.DatabaseConnectionException;
 import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
 import internship.task1service2.service.RequestService;
@@ -21,7 +22,7 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/city_model")
-    public ArrayList<CityModel> getCityArray(){
+    public ArrayList<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
         ArrayList<CityModel> result;
 
         result = requestService.getCityArray();
@@ -30,7 +31,7 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/city_model/{id}")
-    public CityModel getCityById(@PathVariable int id) throws SQLRequestException{
+    public CityModel getCityById(@PathVariable int id) throws SQLRequestException, DatabaseConnectionException {
         return requestService.getCityById(id);
     }
 }
