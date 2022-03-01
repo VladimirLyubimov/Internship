@@ -19,6 +19,7 @@
     <modules>
         <module>task1service1</module>
         <module>task1service2</module>
+        <module>service_discovery_microservice</module>
     </modules>
 
     <properties>

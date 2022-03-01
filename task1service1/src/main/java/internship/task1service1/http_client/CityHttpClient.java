@@ -1,7 +1,6 @@
 package internship.task1service1.http_client;
 
 import internship.task1service1.exceptions.DatabaseConnectionException;
-import internship.task1service1.exceptions.EmptyResultException;
 import internship.task1service1.exceptions.FailConnectionException;
 import internship.task1service1.exceptions.SQLRequestException;
 import internship.task1service1.model.CityModel;

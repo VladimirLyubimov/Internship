@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="service_discovery_microservice" />
         <module name="task1service2" />
         <module name="task1service1" />
       </profile>
@@ -13,6 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="service_discovery_microservice" options="-parameters" />
       <module name="task1service1" options="-parameters" />
       <module name="task1service2" options="-parameters" />
     </option>

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RequestBrokerController {
     private final RequestBrokerService requestBrokerService;
 
-
     @Autowired
     public RequestBrokerController(RequestBrokerService requestBrokerService){
         this.requestBrokerService = requestBrokerService;
