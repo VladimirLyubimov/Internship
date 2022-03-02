@@ -15,7 +15,11 @@ import java.util.Optional;
 
 @Component
 public class CityHttpClient{
+
+    //TODO Потоконебезопасно.
     private HttpClient client;
+
+    //TODO статические переменные принято называть В_ТАКОМ_СТИЛЕ
     private static  final String path = "http://localhost:8100/city_model/";
 
     public CityHttpClient(){
@@ -30,6 +34,7 @@ public class CityHttpClient{
             responseErrorChecker(response);
             return Optional.ofNullable(ResponseDataParser.getCityArray(response.body()));
         }
+        //TODO лучше используй || и &&. Одинарные | и & используются для побитовых сравнений и при сравнении чисел дают число
         catch (IOException | InterruptedException e) {
             e.printStackTrace();
             throw new FailConnectionException("Fail to connect to " + path);

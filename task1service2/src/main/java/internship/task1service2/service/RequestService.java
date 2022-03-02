@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class RequestService {
+
     private final CityRepository cityRepository;
 
     @Autowired
@@ -19,10 +20,12 @@ public class RequestService {
         this.cityRepository = cityRepository;
     }
 
+    // TODO рекомендуется использоватьо более широкий тип (Array)
     public ArrayList<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
         return  cityRepository.getCityArray();
     }
 
+    //TODO
     public CityModel getCityById(int id) throws SQLRequestException, DatabaseConnectionException {
         Optional<CityModel> city = cityRepository.getCityById(id);
         if(city.isPresent()){

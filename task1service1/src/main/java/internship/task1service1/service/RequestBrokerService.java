@@ -37,6 +37,8 @@ public class RequestBrokerService {
             }
         }
         catch (EmptyResultException | SQLRequestException | DatabaseConnectionException e){
+            //TODO в логгерах лучше не использовать конкатенацию
+            //TODO погугли, как лучше
             logger.info("Successfully connected to " + path + ", but didn't get data");
             throw e;
         }

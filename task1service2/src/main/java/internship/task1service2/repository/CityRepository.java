@@ -11,6 +11,11 @@ import java.util.Optional;
 
 @Component
 public class CityRepository {
+
+    //TODO потоконебезопасно. Спринг создает один экземпляр класса. И он один используется на все потоки.
+    //TODO такой класс не должен иметь состояния (если есть поля, они должны быть финальные)
+    //TODO что если два запроса прилетят одновременно?
+    //TODO Погугли!!!
     private Connection con;
 
     public CityRepository(){}
@@ -49,6 +54,7 @@ public class CityRepository {
 
         String query = "select * from city limit 7;";
         ArrayList<CityModel> result = new ArrayList<>();
+        // TODO погугли "try with resource"
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);

@@ -23,6 +23,7 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/city_model")
+    // TODO дучше использовать более широкий тип List
     public ArrayList<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
         ArrayList<CityModel> result;
 
