@@ -16,8 +16,6 @@ import java.util.Optional;
 
 @Service
 public class RequestBrokerService {
-    private static  final String path = "http://localhost:8100/city_model/";
-    private final Logger logger =  LoggerFactory.getLogger(RequestBrokerController.class);
     private final CityHttpClient cityHttpClient;
 
     @Autowired
@@ -26,44 +24,21 @@ public class RequestBrokerService {
     }
 
     public CityModel[] getCityArray() throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException{
-        try {
-            Optional<CityModel[]> result = cityHttpClient.getCityArray();
-            if (result.isPresent() && result.get().length != 0) {
-                logger.info("Successfully connected to " + path);
-                return result.get();
-            }
-            else{
-                throw new EmptyResultException("Requested data hasn't been found");
-            }
+        Optional<CityModel[]> result = cityHttpClient.getCityArray();
+        if (result.isPresent() && result.get().length != 0) {
+            return result.get();
         }
-        catch (EmptyResultException | SQLRequestException | DatabaseConnectionException e){
-            logger.info("Successfully connected to " + path + ", but didn't get data");
-            throw e;
-        }
-
-        catch(FailConnectionException e){
-            logger.info("Fail to make correct request to " + path);
-            throw  e;
+        else{
+            throw new EmptyResultException("Requested data hasn't been found");
         }
     }
 
     public CityModel getCityById(int id) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
-        try {
-            Optional<CityModel> result = cityHttpClient.getCityById(id);
-            if (result.isPresent() && !result.get().isEmpty()) {
-                logger.info("Successfully connected to " + path + id);
-                return result.get();
-            } else {
-                throw new EmptyResultException("City with id = " + id + " hasn't been found");
-            }
-        }
-        catch(EmptyResultException | SQLRequestException | DatabaseConnectionException e){
-            logger.info("Successfully connected to " + path + id + ", but didn't get data");
-            throw e;
-        }
-        catch(FailConnectionException e){
-            logger.info("Fail to make correct request to " + path + id);
-            throw e;
+        Optional<CityModel> result = cityHttpClient.getCityById(id);
+        if (result.isPresent() && !result.get().isEmpty()) {
+            return result.get();
+        } else {
+            throw new EmptyResultException("City with id = " + id + " hasn't been found");
         }
     }
 }
