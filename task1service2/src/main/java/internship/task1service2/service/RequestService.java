@@ -7,7 +7,7 @@ import internship.task1service2.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,7 +19,7 @@ public class RequestService {
         this.cityRepository = cityRepository;
     }
 
-    public ArrayList<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
+    public List<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
         return  cityRepository.getCityArray();
     }
 

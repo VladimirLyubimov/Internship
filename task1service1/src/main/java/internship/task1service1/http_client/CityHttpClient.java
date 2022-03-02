@@ -2,7 +2,6 @@ package internship.task1service1.http_client;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
-import internship.task1service1.controller.RequestBrokerController;
 import internship.task1service1.exceptions.DatabaseConnectionException;
 import internship.task1service1.exceptions.FailConnectionException;
 import internship.task1service1.exceptions.SQLRequestException;
@@ -21,12 +20,10 @@ import java.util.Optional;
 
 @Component
 public class CityHttpClient{
-    private final Logger logger =  LoggerFactory.getLogger(CityHttpClient.class);
-    private HttpClient client;
+    private final Logger logger =  LoggerFactory.getLogger(CityHttpClient.class.getName());
     private final EurekaClient eurekaClient;
 
-    private static String path;
-    private static final String databaseServiceName = "database-client";
+    private static final String DATABASE_SERVICE_NAME = "database-client";
 
     @Autowired
     public CityHttpClient(EurekaClient eurekaClient){
@@ -34,8 +31,8 @@ public class CityHttpClient{
     }
 
     public Optional<CityModel[]> getCityArray() throws FailConnectionException, SQLRequestException, DatabaseConnectionException{
-        client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
-        getDatabaseServicePath("/city_model/");
+        HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
+        String path = getDatabaseServicePath("/city_model/");
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -51,8 +48,8 @@ public class CityHttpClient{
     }
 
     public Optional<CityModel> getCityById(int id) throws FailConnectionException, SQLRequestException, DatabaseConnectionException {
-        client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
-        getDatabaseServicePath("/city_model/"+id);
+        HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
+        String path = getDatabaseServicePath("/city_model/"+id);
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path + id)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -76,13 +73,13 @@ public class CityHttpClient{
         }
     }
 
-    private void getDatabaseServicePath(String pathEnd){
+    private String getDatabaseServicePath(String pathEnd){
         StringBuilder pathMaker = new StringBuilder("http://");
-        InstanceInfo databaseServiceInfo = eurekaClient.getApplication(databaseServiceName).getInstances().get(0);
+        InstanceInfo databaseServiceInfo = eurekaClient.getApplication(DATABASE_SERVICE_NAME).getInstances().get(0);
         pathMaker.append(databaseServiceInfo.getHostName());
         pathMaker.append(':');
         pathMaker.append(databaseServiceInfo.getPort());
         pathMaker.append(pathEnd);
-        path = pathMaker.toString();
+        return  pathMaker.toString();
     }
 }

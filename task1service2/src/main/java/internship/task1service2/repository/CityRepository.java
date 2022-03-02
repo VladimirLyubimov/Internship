@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
 public class CityRepository {
-    private Connection con;
 
     public CityRepository(){}
 
-    public void openConnection() throws DatabaseConnectionException {
+    public Connection openConnection() throws DatabaseConnectionException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -24,7 +24,7 @@ public class CityRepository {
         }
 
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/world", "root", "123456789");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/world", "root", "123456789");
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -32,24 +32,10 @@ public class CityRepository {
         }
     }
 
-    public void closeConnection() throws DatabaseConnectionException{
-        try {
-            if(con != null) {
-                con.close();
-            }
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-            throw new DatabaseConnectionException("Error with closing connection with database");
-        }
-    }
-
-    public ArrayList<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
-        openConnection();
-
+    public List<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
         String query = "select * from city limit 7;";
-        ArrayList<CityModel> result = new ArrayList<>();
-        try {
+        List<CityModel> result = new ArrayList<>();
+        try (Connection con = openConnection()) {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -63,21 +49,16 @@ public class CityRepository {
         }
         catch (SQLException e){
             e.printStackTrace();
-            closeConnection();
             throw new SQLRequestException("Can't make request to database correctly");
         }
-
-        closeConnection();
 
         return result;
     }
 
     public Optional<CityModel> getCityById(int id) throws SQLRequestException, DatabaseConnectionException{
-        openConnection();
-
         String query = "select * from city where id = " + id + ';';
         Optional<CityModel> result;
-        try {
+        try (Connection con = openConnection()){
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -88,11 +69,8 @@ public class CityRepository {
         }
         catch (SQLException e){
             e.printStackTrace();
-            closeConnection();
             throw new SQLRequestException("Can't make request to database correctly");
         }
-
-        closeConnection();
 
         return result;
     }
