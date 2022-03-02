@@ -50,7 +50,7 @@ public class CityHttpClient{
     public Optional<CityModel> getCityById(int id) throws FailConnectionException, SQLRequestException, DatabaseConnectionException {
         HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
         String path = getDatabaseServicePath("/city_model/"+id);
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path + id)).GET().build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             logger.info("Successfully connected to " + path);
