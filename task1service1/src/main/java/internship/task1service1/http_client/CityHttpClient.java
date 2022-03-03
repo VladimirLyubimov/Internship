@@ -73,13 +73,18 @@ public class CityHttpClient{
         }
     }
 
-    private String getDatabaseServicePath(String pathEnd){
+    private String getDatabaseServicePath(String pathEnd) throws FailConnectionException{
         StringBuilder pathMaker = new StringBuilder("http://");
-        InstanceInfo databaseServiceInfo = eurekaClient.getApplication(DATABASE_SERVICE_NAME).getInstances().get(0);
-        pathMaker.append(databaseServiceInfo.getHostName());
-        pathMaker.append(':');
-        pathMaker.append(databaseServiceInfo.getPort());
-        pathMaker.append(pathEnd);
+        try {
+            InstanceInfo databaseServiceInfo = eurekaClient.getApplication(DATABASE_SERVICE_NAME).getInstances().get(0);
+            pathMaker.append(databaseServiceInfo.getHostName());
+            pathMaker.append(':');
+            pathMaker.append(databaseServiceInfo.getPort());
+            pathMaker.append(pathEnd);
+        }
+        catch(NullPointerException e){
+            throw new FailConnectionException("Can't locate database broker microservice");
+        }
         return  pathMaker.toString();
     }
 }

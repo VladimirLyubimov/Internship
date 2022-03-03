@@ -35,17 +35,11 @@ public class CityRepository {
     public List<CityModel> getCityArray() throws SQLRequestException, DatabaseConnectionException{
         String query = "select * from city limit 7;";
         List<CityModel> result = new ArrayList<>();
-        try (Connection con = openConnection()) {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
+        try (Connection con = openConnection(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query);) {
             CityModel city;
             while((city = getCityFromResultSet(rs)) != null) {
                 result.add(city);
             }
-
-            rs.close();
-            stmt.close();
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -58,14 +52,8 @@ public class CityRepository {
     public Optional<CityModel> getCityById(int id) throws SQLRequestException, DatabaseConnectionException{
         String query = "select * from city where id = " + id + ';';
         Optional<CityModel> result;
-        try (Connection con = openConnection()){
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
+        try (Connection con = openConnection(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query);) {
             result = Optional.ofNullable(getCityFromResultSet(rs));
-
-            rs.close();
-            stmt.close();
         }
         catch (SQLException e){
             e.printStackTrace();
