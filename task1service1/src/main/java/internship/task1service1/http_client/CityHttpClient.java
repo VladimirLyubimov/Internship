@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Component
 public class CityHttpClient{
-    private final Logger logger =  LoggerFactory.getLogger(CityHttpClient.class.getName());
+    private static final Logger LOGGER =  LoggerFactory.getLogger(CityHttpClient.class.getName());
     private final EurekaClient eurekaClient;
 
     private static final String DATABASE_SERVICE_NAME = "database-client";
@@ -36,13 +36,13 @@ public class CityHttpClient{
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            logger.info("Successfully connected to " + path);
+            LOGGER.info("Successfully connected to {}", path);
             responseErrorChecker(response);
             return Optional.ofNullable(ResponseDataParser.getCityArray(response.body()));
         }
         catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            logger.info("Fail to connect to " + path);
+            LOGGER.info("Fail to connect to {}", path);
             throw new FailConnectionException("Fail to connect to " + path);
         }
     }
@@ -53,13 +53,13 @@ public class CityHttpClient{
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            logger.info("Successfully connected to " + path);
+            LOGGER.info("Successfully connected to {}", path);
             responseErrorChecker(response);
             return Optional.ofNullable(ResponseDataParser.getOneCity(response.body()));
         }
         catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            logger.info("Fail to connect to " + path);
+            LOGGER.info("Fail to connect to {}", path);
             throw new FailConnectionException("Fail to connect to " + path);
         }
     }
