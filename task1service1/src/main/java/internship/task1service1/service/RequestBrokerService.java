@@ -23,8 +23,8 @@ public class RequestBrokerService {
         this.cityHttpClient = cityHttpClient;
     }
 
-    public CityModel[] getCityArray() throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException{
-        Optional<CityModel[]> result = cityHttpClient.getCityArray();
+    public CityModel[] getCityArray(String count) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException{
+        Optional<CityModel[]> result = cityHttpClient.getCityArray(count);
         if (result.isPresent() && result.get().length != 0) {
             return result.get();
         }

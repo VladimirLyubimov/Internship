@@ -30,9 +30,9 @@ public class CityHttpClient{
         this.eurekaClient = eurekaClient;
     }
 
-    public Optional<CityModel[]> getCityArray() throws FailConnectionException, SQLRequestException, DatabaseConnectionException{
+    public Optional<CityModel[]> getCityArray(String count) throws FailConnectionException, SQLRequestException, DatabaseConnectionException{
         HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build();
-        String path = getDatabaseServicePath("/city_model/");
+        String path = getDatabaseServicePath("/city_model/?count="+count);
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(path)).GET().build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

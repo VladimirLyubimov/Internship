@@ -9,6 +9,7 @@ import internship.task1service1.service.RequestBrokerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,8 +22,8 @@ public class RequestBrokerController {
     }
 
     @GetMapping("/city_model")
-    public CityModel[] getCityArray() throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
-        return requestBrokerService.getCityArray();
+    public CityModel[] getCityArray(@RequestParam(defaultValue = "") String count) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
+        return requestBrokerService.getCityArray(count);
     }
 
     @GetMapping("/city_model/{id}")

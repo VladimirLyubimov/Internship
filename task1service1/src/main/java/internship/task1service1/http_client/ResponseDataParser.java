@@ -1,9 +1,11 @@
 package internship.task1service1.http_client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import internship.task1service1.error_response.ErrorResponse;
 import internship.task1service1.model.CityModel;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseDataParser {
     static public CityModel[] getCityArray(String responseBody){
         CityModel[] result;
