@@ -1,7 +1,5 @@
 package internship.task1service2.controller;
 
-import internship.task1service2.exceptions.DatabaseConnectionException;
-import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
 import internship.task1service2.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class DatabaseBrokerController {
@@ -23,12 +22,12 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/city_model")
-    public List<CityModel> getCityArray(@RequestParam String count) throws SQLRequestException, DatabaseConnectionException{
+    public List<CityModel> getCityArray(@RequestParam Optional<Integer> count){
         return requestService.getCityArray(count);
     }
 
     @GetMapping("/city_model/{id}")
-    public CityModel getCityById(@PathVariable int id) throws SQLRequestException, DatabaseConnectionException {
+    public CityModel getCityById(@PathVariable int id){
         return requestService.getCityById(id);
     }
 }

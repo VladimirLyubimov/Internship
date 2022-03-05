@@ -1,9 +1,6 @@
 package internship.task1service1.controller;
 
-import internship.task1service1.exceptions.DatabaseConnectionException;
-import internship.task1service1.exceptions.EmptyResultException;
-import internship.task1service1.exceptions.FailConnectionException;
-import internship.task1service1.exceptions.SQLRequestException;
+import internship.task1service1.exceptions.*;
 import internship.task1service1.model.CityModel;
 import internship.task1service1.service.RequestBrokerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 public class RequestBrokerController {
@@ -22,7 +21,7 @@ public class RequestBrokerController {
     }
 
     @GetMapping("/city_model")
-    public CityModel[] getCityArray(@RequestParam(defaultValue = "") String count) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
+    public CityModel[] getCityArray(@RequestParam("count") Optional<Integer> count) throws EmptyResultException, FailConnectionException, ObviouslyIncorrectInputDataException, SQLRequestException, DatabaseConnectionException {
         return requestBrokerService.getCityArray(count);
     }
 

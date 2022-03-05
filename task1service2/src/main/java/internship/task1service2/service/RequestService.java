@@ -1,7 +1,5 @@
 package internship.task1service2.service;
 
-import internship.task1service2.exceptions.DatabaseConnectionException;
-import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
 import internship.task1service2.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +20,17 @@ public class RequestService {
         this.cityRepository = cityRepository;
     }
 
-    public List<CityModel> getCityArray(String count) throws SQLRequestException, DatabaseConnectionException{
-        try{
-            int num = parseInt(count);
-            return cityRepository.getCityArray(num);
+    public List<CityModel> getCityArray(Optional<Integer> count){
+        if(count.isPresent()){
+            return cityRepository.getCityArray(count.get());
         }
-        catch (NumberFormatException e){
-            return (List<CityModel>) cityRepository.findAll();
+        else{
+            return cityRepository.findAll();
         }
     }
 
     @Transactional
-    public CityModel getCityById(int id) throws SQLRequestException, DatabaseConnectionException {
+    public CityModel getCityById(int id){
         Optional<CityModel> city = cityRepository.findById(id);
         if(city.isPresent()){
             return city.get();
