@@ -69,4 +69,9 @@ public class RequestBrokerService {
             throw new EmptyResultException("City with id = " + id + " hasn't been found");
         }
     }
+
+    public void getDatabaseSchema(){
+        cityFeignClient.getDatabaseSchema();
+        LOGGER.info("Successfully get database schema");
+    }
 }

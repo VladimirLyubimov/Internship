@@ -30,4 +30,9 @@ public class DatabaseBrokerController {
     public CityModel getCityById(@PathVariable int id){
         return requestService.getCityById(id);
     }
+
+    @GetMapping("/schema")
+    public void checkCon(){
+        requestService.checkCon();
+    }
 }

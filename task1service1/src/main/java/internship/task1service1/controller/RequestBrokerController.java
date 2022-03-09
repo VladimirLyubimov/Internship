@@ -29,4 +29,9 @@ public class RequestBrokerController {
     public CityModel getCityById(@PathVariable int id) throws EmptyResultException, FailConnectionException{
         return requestBrokerService.getCityById(id);
     }
+
+    @GetMapping("/schema")
+    public void getDatabaseSchema(){
+        requestBrokerService.getDatabaseSchema();
+    }
 }

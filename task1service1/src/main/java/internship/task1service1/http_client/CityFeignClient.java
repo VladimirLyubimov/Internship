@@ -15,4 +15,7 @@ public interface CityFeignClient {
 
     @GetMapping("/city_model?count=")
     public CityModel[] getAllCities();
+
+    @GetMapping("/schema")
+    public void getDatabaseSchema();
 }
