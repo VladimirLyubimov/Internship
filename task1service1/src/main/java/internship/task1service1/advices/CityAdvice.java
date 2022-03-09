@@ -17,7 +17,7 @@ public class CityAdvice {
 
     @ExceptionHandler(FailConnectionException.class)
     public ResponseEntity<ErrorResponse> connectionExceptionHandler(FailConnectionException e){
-        return new ResponseEntity<>(new ErrorResponse("Connection fail", e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
+        return new ResponseEntity<>(e.getErrorResponse(), HttpStatus.resolve(e.getErrorResponse().getCode()));
     }
 
     @ExceptionHandler(ObviouslyIncorrectInputDataException.class)
@@ -32,13 +32,13 @@ public class CityAdvice {
         return new ResponseEntity<>(new ErrorResponse("Incorrect number format", "A decimal integer for city id or city amount expected, but got: " + wrongNum), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(SQLRequestException.class)
-    public ResponseEntity<ErrorResponse> sqlRequestException(SQLRequestException e){
-        return new ResponseEntity<>(new ErrorResponse("Error with SQL request", e.getMessage()), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(BadErrorResponseException.class)
+    public ResponseEntity<ErrorResponse> badErrorResponseException(BadErrorResponseException e){
+        return new ResponseEntity<>(new ErrorResponse("Bad error response", e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DatabaseConnectionException.class)
-    public ResponseEntity<ErrorResponse> databaseConnectionExceptionHandler(DatabaseConnectionException e){
-        return new ResponseEntity<>(new ErrorResponse("Database connection fail", e.getMessage()), HttpStatus.SERVICE_UNAVAILABLE);
+    @ExceptionHandler(ClientSideErrorException.class)
+    public ResponseEntity<ErrorResponse> clientsideErrorExceptionHandler(ClientSideErrorException e){
+        return new ResponseEntity<>(e.getErrorResponse(), HttpStatus.resolve(e.getErrorResponse().getCode()));
     }
 }

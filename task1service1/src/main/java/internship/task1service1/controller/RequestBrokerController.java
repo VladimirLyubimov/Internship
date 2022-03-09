@@ -21,12 +21,12 @@ public class RequestBrokerController {
     }
 
     @GetMapping("/city_model")
-    public CityModel[] getCityArray(@RequestParam("count") Optional<Integer> count) throws EmptyResultException, FailConnectionException, ObviouslyIncorrectInputDataException, SQLRequestException, DatabaseConnectionException {
+    public CityModel[] getCityArray(@RequestParam("count") Optional<Integer> count) throws EmptyResultException, FailConnectionException, ObviouslyIncorrectInputDataException{
         return requestBrokerService.getCityArray(count);
     }
 
     @GetMapping("/city_model/{id}")
-    public CityModel getCityById(@PathVariable int id) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
+    public CityModel getCityById(@PathVariable int id) throws EmptyResultException, FailConnectionException{
         return requestBrokerService.getCityById(id);
     }
 }

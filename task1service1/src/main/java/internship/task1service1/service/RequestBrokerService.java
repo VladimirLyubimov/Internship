@@ -1,6 +1,10 @@
 package internship.task1service1.service;
 
-import internship.task1service1.exceptions.*;
+import feign.FeignException;
+import internship.task1service1.error_response.ErrorResponse;
+import internship.task1service1.exceptions.EmptyResultException;
+import internship.task1service1.exceptions.FailConnectionException;
+import internship.task1service1.exceptions.ObviouslyIncorrectInputDataException;
 import internship.task1service1.http_client.CityFeignClient;
 import internship.task1service1.model.CityModel;
 import org.slf4j.Logger;
@@ -21,24 +25,24 @@ public class RequestBrokerService {
         this.cityFeignClient = cityFeignClient;
     }
 
-    public CityModel[] getCityArray(Optional<Integer> count) throws EmptyResultException, FailConnectionException, ObviouslyIncorrectInputDataException, SQLRequestException, DatabaseConnectionException{
+    public CityModel[] getCityArray(Optional<Integer> count) throws EmptyResultException, ObviouslyIncorrectInputDataException, FailConnectionException{
         if(count.isPresent() && count.get() < 0){
+            LOGGER.info("Can't get negative amount of cities");
             throw new ObviouslyIncorrectInputDataException("Input amount of cities = " + count.get() + ". It is impossible to get negative amount of cities");
         }
         Optional<CityModel[]> result;
         try {
-            if(count.isPresent()) {
+            if (count.isPresent()) {
                 result = Optional.ofNullable(cityFeignClient.getCityArray(count.get()));
-            }
-            else{
+            } else {
                 result = Optional.ofNullable(cityFeignClient.getAllCities());
             }
-            LOGGER.info("Successfully connected to database service");
         }
-        catch (Exception e){
-            LOGGER.info("Fail to connect to database service");
-            throw e;
+        catch (FeignException e){
+            LOGGER.info("Can't connect to database service");
+            throw new FailConnectionException(new ErrorResponse("Connection error", e.getMessage(), 503));
         }
+        LOGGER.info("Successfully connected to database service");
 
         if (result.isPresent() && result.get().length != 0) {
             return result.get();
@@ -48,16 +52,16 @@ public class RequestBrokerService {
         }
     }
 
-    public CityModel getCityById(int id) throws EmptyResultException, FailConnectionException, SQLRequestException, DatabaseConnectionException {
+    public CityModel getCityById(int id) throws EmptyResultException, FailConnectionException{
         Optional<CityModel> result;
         try {
             result = Optional.ofNullable(cityFeignClient.getCityById(id));
-            LOGGER.info("Successfully connected to database service");
         }
-        catch (Exception e){
-            LOGGER.info("Fail to connect to database service");
-            throw e;
+        catch (FeignException e){
+            LOGGER.info("Can't connect to database service");
+            throw new FailConnectionException(new ErrorResponse("Connection error", e.getMessage(), 503));
         }
+        LOGGER.info("Successfully connected to database service");
 
         if (result.isPresent() && !result.get().isEmpty()) {
             return result.get();
