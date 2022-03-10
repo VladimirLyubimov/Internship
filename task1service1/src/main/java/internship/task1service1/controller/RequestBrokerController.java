@@ -2,6 +2,7 @@ package internship.task1service1.controller;
 
 import internship.task1service1.exceptions.*;
 import internship.task1service1.model.CityModel;
+import internship.task1service1.model.TableModel;
 import internship.task1service1.service.RequestBrokerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class RequestBrokerController {
     }
 
     @GetMapping("/schema")
-    public void getDatabaseSchema(){
-        requestBrokerService.getDatabaseSchema();
+    public TableModel[] getDatabaseSchema()  throws EmptyResultException, FailConnectionException {
+        return requestBrokerService.getDatabaseSchema();
     }
 }

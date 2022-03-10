@@ -7,6 +7,7 @@ import internship.task1service1.exceptions.FailConnectionException;
 import internship.task1service1.exceptions.ObviouslyIncorrectInputDataException;
 import internship.task1service1.http_client.CityFeignClient;
 import internship.task1service1.model.CityModel;
+import internship.task1service1.model.TableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,21 @@ public class RequestBrokerService {
         }
     }
 
-    public void getDatabaseSchema(){
-        cityFeignClient.getDatabaseSchema();
-        LOGGER.info("Successfully get database schema");
+    public TableModel[] getDatabaseSchema() throws EmptyResultException, FailConnectionException{
+        Optional<TableModel[]> result;
+        try {
+            result = Optional.ofNullable(cityFeignClient.getDatabaseSchema());
+        }
+        catch (FeignException e){
+            LOGGER.info("Can't connect to database service");
+            throw new FailConnectionException(new ErrorResponse("Connection error", e.getMessage(), 503));
+        }
+        LOGGER.info("Successfully connected to database service");
+
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new EmptyResultException("Can't get database metadata");
+        }
     }
 }

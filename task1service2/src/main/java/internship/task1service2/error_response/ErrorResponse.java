@@ -1,8 +1,13 @@
 package internship.task1service2.error_response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ErrorResponse {
     private String errorName;
     private String errorDescriptionMessage;
+
+    @JsonIgnore
+    private int code;
 
     public ErrorResponse(){}
 

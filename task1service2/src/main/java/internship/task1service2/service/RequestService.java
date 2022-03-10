@@ -1,6 +1,9 @@
 package internship.task1service2.service;
 
+import internship.task1service2.exceptions.DatabaseConnectionException;
+import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
+import internship.task1service2.model.TableModel;
 import internship.task1service2.repository.CityRepository;
 import internship.task1service2.repository.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +24,8 @@ public class RequestService {
         this.databaseRepository = databaseRepository;
     }
 
-    public void checkCon(){
-        System.out.println(databaseRepository.getConnection());
+    public List<TableModel> getDatabaseStructure() throws DatabaseConnectionException, SQLRequestException {
+        return databaseRepository.getDatabaseStructure();
     }
 
     public List<CityModel> getCityArray(Optional<Integer> count){

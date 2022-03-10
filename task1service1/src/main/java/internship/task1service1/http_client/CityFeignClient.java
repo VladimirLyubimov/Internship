@@ -1,6 +1,7 @@
 package internship.task1service1.http_client;
 
 import internship.task1service1.model.CityModel;
+import internship.task1service1.model.TableModel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,5 +18,5 @@ public interface CityFeignClient {
     public CityModel[] getAllCities();
 
     @GetMapping("/schema")
-    public void getDatabaseSchema();
+    public TableModel[] getDatabaseSchema();
 }

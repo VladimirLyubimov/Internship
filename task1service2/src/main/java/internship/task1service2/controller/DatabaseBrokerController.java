@@ -1,6 +1,9 @@
 package internship.task1service2.controller;
 
+import internship.task1service2.exceptions.DatabaseConnectionException;
+import internship.task1service2.exceptions.SQLRequestException;
 import internship.task1service2.model.CityModel;
+import internship.task1service2.model.TableModel;
 import internship.task1service2.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +35,7 @@ public class DatabaseBrokerController {
     }
 
     @GetMapping("/schema")
-    public void checkCon(){
-        requestService.checkCon();
+    public List<TableModel> getDatabaseStructure() throws DatabaseConnectionException, SQLRequestException {
+        return requestService.getDatabaseStructure();
     }
 }
