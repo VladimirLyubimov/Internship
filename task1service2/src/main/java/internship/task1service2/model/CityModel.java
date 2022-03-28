@@ -1,10 +1,16 @@
 package internship.task1service2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
+@Setter
+@Getter
+@AllArgsConstructor
+@ToString
 @Table(name = "city")
 public class CityModel {
     @JsonIgnore
@@ -34,44 +40,13 @@ public class CityModel {
         this.population = population;
     }
 
-    public String getName() {
-        return this.name;
-    }
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof CityModel)){
+            return false;
+        }
 
-    public String getCountryCode() {
-        return this.countryCode;
+        CityModel city = (CityModel) o;
+        return this.name.equals(city.getName()) && this.countryCode.equals(city.getCountryCode()) && this.population == city.getPopulation();
     }
-
-    public int getPopulation() {
-        return this.population;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
 }
